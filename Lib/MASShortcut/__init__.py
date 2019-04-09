@@ -10,6 +10,7 @@ import sys
 import os
 import Foundation
 
+from MASShortcut import _constants
 from MASShortcut import _metadata
 from MASShortcut._inlines import _inline_list_
 
