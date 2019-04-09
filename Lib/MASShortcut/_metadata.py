@@ -2,7 +2,8 @@
 #
 # Last update: Sun Sep 23 11:05:41 2018
 
-import objc, sys
+import sys
+import objc
 
 if sys.maxsize > 2 ** 32:
     def sel32or64(a, b): return b
@@ -16,26 +17,106 @@ else:
 misc = {
 }
 constants = '''$MASDictionaryTransformerName$MASShortcutBinding$'''
-enums = '''$MASShortcutViewStyleDefault@0$MASShortcutViewStyleFlat@3$MASShortcutViewStyleRounded@2$MASShortcutViewStyleTexturedRect@1$kMASShortcutGlyphClear@10005$kMASShortcutGlyphDeleteLeft@9003$kMASShortcutGlyphDeleteRight@8998$kMASShortcutGlyphDownArrow@8595$kMASShortcutGlyphEject@9167$kMASShortcutGlyphEscape@9099$kMASShortcutGlyphHelp@63$kMASShortcutGlyphLeftArrow@8592$kMASShortcutGlyphNorthwestArrow@8598$kMASShortcutGlyphPadClear@8999$kMASShortcutGlyphPageDown@8671$kMASShortcutGlyphPageUp@8670$kMASShortcutGlyphReturn@8965$kMASShortcutGlyphReturnR2L@8617$kMASShortcutGlyphRightArrow@8594$kMASShortcutGlyphSoutheastArrow@8600$kMASShortcutGlyphTabRight@8677$kMASShortcutGlyphUpArrow@8593$'''
+enums = '''$MASShortcutViewStyleDefault@0$MASShortcutViewStyleFlat@3$MASShortcutViewStyleRounded@2$MASShortcutViewStyleTexturedRect@1$kMASShortcutGlyphClear@10005$kMASShortcutGlyphDeleteLeft@9003$kMASShortcutGlyphDeleteRight@8998$kMASShortcutGlyphDownArrow@8595$kMASShortcutGlyphEject@9167$kMASShortcutGlyphEscape@9099$kMASShortcutGlyphHelp@63$kMASShortcutGlyphLeftArrow@8592$kMASShortcutGlyphNorthwestArrow@8598$kMASShortcutGlyphPadClear@8999$kMASShortcutGlyphPageDown@8671$kMASShortcutGlyphPageUp@8670$kMASShortcutGlyphReturn@8965$kMASShortcutGlyphReturnR2L@8617$kMASShortcutGlyphRightArrow@8594$kMASShortcutGlyphSoutheastArrow@8600$kMASShortcutGlyphTabRight@8677$kMASShortcutGlyphUpArrow@8593$'''     # noqa
 misc.update({})
-functions={'MASCarbonModifiersFromCocoaModifiers': (sel32or64(b'II', b'IQ'),), 'MASPickCocoaModifiers': (sel32or64(b'ii', b'qq'),), 'NS_ENUM': (b'iii',), 'NSStringFromMASKeyCode': (b'@S',)}
+functions = {'MASCarbonModifiersFromCocoaModifiers': (sel32or64(b'II', b'IQ'),), 'MASPickCocoaModifiers': (sel32or64(b'ii', b'qq'),), 'NS_ENUM': (b'iii',), 'NSStringFromMASKeyCode': (b'@S',)}         # noqa
 r = objc.registerMetaDataForSelector
 objc._updatingMetadata(True)
 try:
-    r(b'MASShortcutMonitor', b'isShortcutRegistered:', {'retval': {'type': 'Z'}})
-    r(b'MASShortcutMonitor', b'registerShortcut:withAction:', {'retval': {'type': 'Z'}})
-    r(b'MASShortcutValidator', b'allowAnyShortcutWithOptionModifier', {'retval': {'type': 'Z'}})
-    r(b'MASShortcutValidator', b'isShortcut:alreadyTakenInMenu:explanation:', {'retval': {'type': 'Z'}, 'arguments': {4: {'type_modifier': b'o'}}})
-    r(b'MASShortcutValidator', b'isShortcutAlreadyTakenBySystem:explanation:', {'retval': {'type': 'Z'}, 'arguments': {3: {'type_modifier': b'o'}}})
-    r(b'MASShortcutValidator', b'isShortcutValid:', {'retval': {'type': 'Z'}})
-    r(b'MASShortcutValidator', b'setAllowAnyShortcutWithOptionModifier:', {'arguments': {2: {'type': 'Z'}}})
-    r(b'MASShortcutView', b'isEnabled', {'retval': {'type': 'Z'}})
-    r(b'MASShortcutView', b'isRecording', {'retval': {'type': 'Z'}})
-    r(b'MASShortcutView', b'setAcceptsFirstResponder:', {'arguments': {2: {'type': 'Z'}}})
-    r(b'MASShortcutView', b'setEnabled:', {'arguments': {2: {'type': 'Z'}}})
-    r(b'MASShortcutView', b'setRecording:', {'arguments': {2: {'type': 'Z'}}})
-    r(b'MASShortcutView', b'setShortcutValueChange:', {'arguments': {2: {'callable': {'retval': {'type': b'v'}, 'arguments': {0: {'type': b'^v'}, 1: {'type': b'@'}}}}}})
-    r(b'MASShortcutView', b'shortcutValueChange', {'retval': {'callable': {'retval': {'type': b'v'}, 'arguments': {0: {'type': b'^v'}, 1: {'type': b'@'}}}}})
+    r(
+        b'MASShortcutMonitor',
+        b'isShortcutRegistered:',
+        {'retval': {'type': 'Z'}, 'arguments': {3: {'type': b'@'}}}
+    )
+    r(
+        b'MASShortcutMonitor',
+        b'registerShortcut:withAction:',
+        {
+            'retval': {'type': 'Z'},
+            'arguments': {
+                2: {'type': b'@'},
+                3: {'callable': {
+                    'retval': {'type': b'v'},
+                    'arguments': {0: {'type': b'^v'}}}},
+            }
+        }
+    )
+    r(
+        b'MASShortcutValidator',
+        b'allowAnyShortcutWithOptionModifier',
+        {'retval': {'type': 'Z'}}
+    )
+    r(
+        b'MASShortcutValidator',
+        b'isShortcut:alreadyTakenInMenu:explanation:',
+        {'retval': {'type': 'Z'}, 'arguments': {4: {'type_modifier': b'o'}}}
+    )
+    r(
+        b'MASShortcutValidator',
+        b'isShortcutAlreadyTakenBySystem:explanation:',
+        {'retval': {'type': 'Z'}, 'arguments': {3: {'type_modifier': b'o'}}}
+    )
+    r(
+        b'MASShortcutValidator',
+        b'isShortcutValid:',
+        {'retval': {'type': 'Z'}}
+    )
+    r(
+        b'MASShortcutValidator',
+        b'setAllowAnyShortcutWithOptionModifier:',
+        {'arguments': {2: {'type': 'Z'}}}
+    )
+    r(
+        b'MASShortcutView',
+        b'isEnabled',
+        {'retval': {'type': 'Z'}}
+    )
+    r(
+        b'MASShortcutView',
+        b'isRecording',
+        {'retval': {'type': 'Z'}}
+    )
+    r(
+        b'MASShortcutView',
+        b'setAcceptsFirstResponder:',
+        {'arguments': {2: {'type': 'Z'}}}
+    )
+    r(
+        b'MASShortcutView',
+        b'setEnabled:',
+        {'arguments': {2: {'type': 'Z'}}}
+    )
+    r(
+        b'MASShortcutView',
+        b'setRecording:',
+        {'arguments': {2: {'type': 'Z'}}}
+    )
+    r(
+        b'MASShortcutView',
+        b'setShortcutValueChange:',
+        {
+            'arguments': {
+                2: {
+                    'callable': {
+                        'retval': {'type': b'v'},
+                        'arguments': {0: {'type': b'^v'}, 1: {'type': b'@'}}
+                    }
+                }
+            }
+        }
+    )
+    r(
+        b'MASShortcutView',
+        b'shortcutValueChange',
+        {
+            'retval': {
+                'callable': {
+                    'retval': {'type': b'v'},
+                    'arguments': {0: {'type': b'^v'}, 1: {'type': b'@'}}
+                }
+            }
+        }
+    )
 finally:
     objc._updatingMetadata(False)
 expressions = {}
