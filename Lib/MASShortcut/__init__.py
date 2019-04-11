@@ -10,15 +10,40 @@ import sys
 import os
 import Foundation
 
-from MASShortcut import _constants
+import MASShortcut.constants
 from MASShortcut import _metadata
 from MASShortcut._inlines import _inline_list_
+
+
+def _find_framework():
+    name = 'MASShortcut.framework'
+    home = os.path.expanduser('~')
+    paths = [
+        os.path.join(os.sep, 'Library', 'Frameworks', name),
+        os.path.join(home, 'Library', 'Frameworks', name),
+        os.path.join(os.sep, 'System', 'Library', 'Frameworks', name),
+    ]
+    try:
+        paths.append(
+            os.path.join(
+                Foundation.NSBundle.mainBundle().privateFrameworksPath(),
+                name
+            )
+        )
+    except Exception:
+        pass
+    for path in paths:
+        if os.path.exists(path):
+            return path
+    return os.path.join(
+        os.path.dirname(os.path.abspath(__file__)), "MASShortcut.framework"
+    )
 
 
 sys.modules['MASShortcut'] = mod = objc.ObjCLazyModule(
     "MASShortcut",
     "com.github.shpakovski.MASShortcut",
-    os.path.join(os.path.dirname(os.path.abspath(__file__)), "MASShortcut.framework"),
+    _find_framework(),
     _metadata.__dict__, _inline_list_, {
         '__doc__': __doc__,
         'objc': objc,
